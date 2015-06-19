@@ -32,7 +32,6 @@ class S3Util
       Key: path
     @promise.then () ->
       Q.Promise (resolve, reject, notify) ->
-        console.log 'asd'
         s3.getObject params, (err, data) ->
           if err
             reject err

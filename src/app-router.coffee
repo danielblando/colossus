@@ -1,4 +1,7 @@
-vtexCredentials = require './utils/vtex-credentials'
+Gallery = require './lib/gallery'
+
+a = new Gallery 'walmartv5'
+a.downloadFilesFromApp('vtex.hello-world')
 
 class AppRouter
   constructor: (@router) ->

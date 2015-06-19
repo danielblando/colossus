@@ -10,5 +10,8 @@ class Application
       if controller.match(req, res, next)
         return;
     throw new ServiceError 404, "Route Not Found"
+  getAppVersionMap: (accountName) ->
+    path = 'http://api.beta.vtex.com/' + accountName + '/workspaces/master/apps'
+
 
 module.exports = Application

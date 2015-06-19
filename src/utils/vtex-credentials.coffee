@@ -9,12 +9,11 @@ class VtexCredentials
     @promise = @promise.then (data) ->
       credentials = JSON.parse data
       token = credentials[0]
-      console.log token.token
+      #console.log token.token
       return request.get 'https://vtexid.vtex.com.br/api/vtexid/pub/authenticate/default?user=vtexappkey-appvtex&scope=&pass=' + token.token
-
-    @promise.then (data) ->
-      console.log data
   getToken: () ->
+    return @promise.then (data) ->
+      return JSON.parse(data)
 
 
 module.exports = new VtexCredentials()

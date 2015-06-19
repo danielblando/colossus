@@ -1,6 +1,8 @@
 request = require 'request'
 Q = require 'q';
 
+request.defaults 'proxy':'http://localhost:8888'
+
 class Request
   constructor: () ->
   get: (params) ->

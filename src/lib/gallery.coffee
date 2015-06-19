@@ -1,6 +1,9 @@
 request = require '../utils/request'
 vtexCredentials = require '../utils/vtex-credentials'
+path = require 'path'
+mkdirp = require 'mkdirp'
 fs = require 'fs'
+Q = require 'q'
 
 class Gallery
   constructor: (@accountName) ->
@@ -37,7 +40,6 @@ class Gallery
 
     promise = promise.then (version) ->
       return vtexCredentials.getToken().then (token) ->
-        console.log 'asdasdasdasdasdasd'
         options =
           url: 'http://api.beta.vtex.com/' + vendor + '/apps/'+ name + '/' + version + '/files?i=colossus/&content=true'
           proxy: 'http://localhost:8888'
@@ -46,14 +48,21 @@ class Gallery
             Accept: 'application/vnd.vtex.gallery.v0+json'
         return request.get options
 
-    promise.then (data) ->
-      appContent = JSON.parse data
-      for key, value of appContent
-        fs.writeFile './apps/' + key, value.content, (err) ->
-          console.log err
+    saveFile = (key, content) ->
+      return Q.Promise (resolve, reject, notify) ->
+        dir = path.dirname('./apps/' + key)
+        mkdirp dir, (err) ->
+          fs.writeFile './apps/' + key, content,  (err) ->
+            console.log key
+            resolve()
 
-        console.log '../../apps/' + key
-        console.log value
+    return promise.then (data) ->
+        appContent = JSON.parse data
+        promisses = []
 
+        for key, value of appContent
+          promisses.push saveFile key, value.content
+
+        return Q.all promisses
 
 module.exports = Gallery

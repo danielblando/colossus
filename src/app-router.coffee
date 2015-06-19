@@ -43,7 +43,7 @@ class AppRouter
           hosts: pkg.hosts
 
         res.json whoami
-      
+
   clearSandboxCache: (completePath) ->
     file = require.resolve(completePath)
     folder = path.dirname(file)

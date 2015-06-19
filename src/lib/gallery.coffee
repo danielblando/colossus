@@ -70,10 +70,8 @@ class Gallery
 
     promise = @getVersionMapFromApp appName
 
-    thz = @
-
-    return promise.then (version) ->
-      return thz.downloadFilesFromCustomApp(appName, version)
+    return promise.then (version) =>
+      return @downloadFilesFromCustomApp(appName, version)
 
   downloadFilesFromCustomApp: (appName, version, sandbox) ->
     vendor = appName.split('.')[0]
@@ -87,17 +85,15 @@ class Gallery
           sandBoxName = sandbox.replace(':', '/').split('/')[1]
           appPath = './apps/sandbox/' + sandBoxName + '/' + appName + '/'
         dir = path.dirname(appPath + key)
-        console.log version
+        #log version
         mkdirp dir, (err) ->
           fs.writeFile appPath + key, content,  (err) ->
-            console.log key
+            #console.log key
             resolve(appPath)
 
-    thz = @
-
-    promise = vtexCredentials.getToken().then (token) ->
-        return thz.getFiles(vendor, name, token, version, sandbox).then (data)->
-          console.log data
+    promise = vtexCredentials.getToken().then (token) =>
+        return @getFiles(vendor, name, token, version, sandbox).then (data)->
+          #console.log data
           appContent = JSON.parse data
           promisses = []
           for key, value of appContent

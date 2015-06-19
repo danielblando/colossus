@@ -15,7 +15,7 @@ class Controller
     #  throw  new ServiceError 404, 'asd'
     #route res, res, next
   get: (route, func) ->
-    @routes["/:accountName/:appName" + route] = func
+    @routes["/:accountName/colossus/:appName" + route] = func
 
 module.exports = Controller
 

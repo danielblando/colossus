@@ -4,7 +4,7 @@ pkg = require '../package.json'
 
 class AppRouter
   constructor: (@router) ->
-    @router.route '/:accountName/:appName/*'
+    @router.route '/:accountName/colossus/:appName/*'
       .get (req, res, next) ->
 
         accountName = req.params.accountName

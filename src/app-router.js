@@ -11,7 +11,7 @@
   AppRouter = (function() {
     function AppRouter(router) {
       this.router = router;
-      this.router.route('/:accountName/:appName/*').get(function(req, res, next) {
+      this.router.route('/:accountName/colossus/:appName/*').get(function(req, res, next) {
         var accountName, appName, gallery, promise, sandBox, version;
         accountName = req.params.accountName;
         appName = req.params.appName;

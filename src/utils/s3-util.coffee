@@ -23,6 +23,7 @@ class S3Util
           s3 = new AWS.S3();
           resolve AWS.config
       else
+        s3 = new AWS.S3();
         resolve AWS.config
   list: () ->
     @promise.then (data) ->

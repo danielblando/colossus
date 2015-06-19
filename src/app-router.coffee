@@ -1,5 +1,4 @@
 Gallery = require './lib/gallery'
-fresh = require 'fresh-require'
 pkg = require '../package.json'
 path = require 'path'
 
@@ -24,9 +23,7 @@ class AppRouter
           appPath = path
           if sandBox?
             @clearSandboxCache '../' + appPath + 'colossus'
-            application = fresh '../' + appPath + 'colossus', require
-          else
-            application = require '../' + appPath + 'colossus'
+          application = require '../' + appPath + 'colossus'
           application.run accountName, appName, req, res, next
 
         promise.catch (err) ->
@@ -53,7 +50,6 @@ class AppRouter
     for key of require.cache
       if key.indexOf(folder, 0) is 0
         delete require.cache[key]
-
     console.log folder
 
 

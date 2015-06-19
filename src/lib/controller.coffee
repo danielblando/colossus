@@ -3,19 +3,37 @@ ServiceError= require './service-error'
 
 class Controller
   constructor: () ->
-    @routes = {}
+    @routes = []
   match: (req, res, next) ->
-    for key of @routes
-      route = new Route(key)
-      if route.match req.originalUrl
-        @routes[key] req, res, next
+    for item in @routes
+      route = new Route(item.route)
+      if route.match(req.originalUrl) and req.method is item.method
+        item.func req, res, next
         return true;
-    #route = @routes["/testeDoido"]
-    #if not route
-    #  throw  new ServiceError 404, 'asd'
-    #route res, res, next
+
   get: (route, func) ->
-    @routes["/:accountName/colossus/:appName" + route] = func
+    @routes.push
+      method: "GET"
+      route: "/:accountName/colossus/:appName" + route
+      func: func
+
+  post: (route, func) ->
+    @routes.push
+      method: "POST"
+      route: "/:accountName/colossus/:appName" + route
+      func: func
+
+  put: (route, func) ->
+    @routes.push
+      method: "PUT"
+      route: "/:accountName/colossus/:appName" + route
+      func: func
+
+  delete: (route, func) ->
+    @routes.push
+      method: "DELETE"
+      route: "/:accountName/colossus/:appName" + route
+      func: func
 
 module.exports = Controller
 

@@ -1,5 +1,6 @@
 Gallery = require './lib/gallery'
 fresh = require 'fresh-require'
+pkg = require '../package.json'
 
 class AppRouter
   constructor: (@router) ->
@@ -23,6 +24,17 @@ class AppRouter
     @router.route '/healthcheck'
       .get (req, res, next) ->
         res.json "ok"
+
+    @router.route '/meta/whoami'
+      .get (req, res, next) ->
+        whoami =
+          app: pkg.name
+          appShortName: pkg.name
+          version: pkg.version
+          roots: pkg.paths
+          hosts: pkg.hosts
+
+        res.json whoami
 
 module.exports = (router) ->
   return new AppRouter(router)

@@ -33,23 +33,23 @@ class Gallery
           return item.version
       return ''
 
-  getFiles: (vendor, appName, token, version, sandbox) ->
-    if version != null
-      return getFilesFromVersion(vendor, appName, token, version)
-    else if sandbox != null
-      return getFilesFromSandbox(vendor, appName, token, sandbox)
-    else
-      throw new Error()
 
   getFilesFromVersion: (vendor, appName, token, version) ->
     options =
       url: 'http://api.beta.vtex.com/' + vendor + '/apps/'+ appName + '/' + version + '/files?i=colossus/&content=true'
-      #proxy: 'http://localhost:8888'
       headers:
         Authorization: 'token ' + token.authCookie.Value
         Accept: 'application/vnd.vtex.gallery.v0+json'
-
     return request.get(options)
+
+  getFiles: (vendor, appName, token, version, sandbox) ->
+    if version?
+      return @getFilesFromVersion(vendor, appName, token, version)
+    else if sandbox?
+      return @getFilesFromSandbox(vendor, appName, token, sandbox)
+    else
+      throw new Error()
+
 
   getFilesFromSandbox: (vendor, appName, token, sandbox) ->
     sandBoxName = sandbox.replace(':', '/').split('/')[1]
@@ -70,8 +70,10 @@ class Gallery
 
     promise = @getVersionMapFromApp appName
 
+    thz = @
+
     return promise.then (version) ->
-      return downloadFilesFromAppVersion(appName, version)
+      return thz.downloadFilesFromCustomApp(appName, version)
 
   downloadFilesFromCustomApp: (appName, version, sandbox) ->
     vendor = appName.split('.')[0]
@@ -91,9 +93,10 @@ class Gallery
             console.log key
             resolve(appPath)
 
-    getFiles = @getFile
+    thz = @
+
     promise = vtexCredentials.getToken().then (token) ->
-        return getFiles(vendor, name, token, version, sandbox).then (data)->
+        return thz.getFiles(vendor, name, token, version, sandbox).then (data)->
           console.log data
           appContent = JSON.parse data
           promisses = []

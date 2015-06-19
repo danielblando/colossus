@@ -14,7 +14,7 @@ class AppRouter
 
         gallery = new Gallery accountName
 
-        if !version or !sandBox
+        if version? or sandBox?
           promise = gallery.downloadFilesFromCustomApp(appName, version, sandBox)
         else
           promise = gallery.downloadFilesFromDefaultApp(appName)

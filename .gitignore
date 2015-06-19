@@ -3,6 +3,7 @@ npm-debug.log
 *~
 *.map
 src/*/*.js
+src/*.js
 app.js
 server.js
 .idea

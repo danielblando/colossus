@@ -13,7 +13,7 @@
     "request": "^2.58.0",
     "route-parser": "0.0.3",
     "routes": "^2.0.0",
-    "vtex.colossus": "^1.0.5",
+    "vtex.colossus": "^1.0.6",
     "xmldoc": "^0.3.1"
   },
   "paths": [

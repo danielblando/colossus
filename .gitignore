@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+*~
+*.map
+src/*/*.js
+app.js
+server.js
+.idea
+.idea/libraries/Generated_files.xml

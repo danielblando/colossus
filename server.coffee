@@ -4,7 +4,7 @@ fs = require('fs');
 domain = require 'domain';
 vm = require 'vm'
 
-ServiceError = require './src/exceptions/service-error'
+ServiceError = require './src/lib/service-error'
 appRouter = require './src/app-router'
 
 

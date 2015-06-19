@@ -1,4 +1,4 @@
-ServiceError= require '../exceptions/service-error'
+ServiceError= require './service-error'
 
 class Application
   constructor: () ->

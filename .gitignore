@@ -6,5 +6,5 @@ src/*/*.js
 app.js
 server.js
 .idea
-.apps
+apps
 .idea/libraries/Generated_files.xml

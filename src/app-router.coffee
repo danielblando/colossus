@@ -10,10 +10,9 @@ class AppRouter
 
         gallery = new Gallery accountName
 
-        promise = gallery.downloadFilesFromApp(appName).then () ->
-          console.log 'asdasd'
-          appPath = '../apps/colossus'
-          application = require appPath
+        promise = gallery.downloadFilesFromApp(appName).then (path) ->
+          appPath = path
+          application = require '../' + appPath + 'colossus'
           application.run accountName, appName, req, res, next
 
         promise.catch (err) ->

@@ -1,5 +1,5 @@
 Route = require('route-parser');
-ServiceError= require '../exceptions/service-error'
+ServiceError= require './service-error'
 
 class Controller
   constructor: () ->

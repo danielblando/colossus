@@ -12,11 +12,10 @@
         accountName = req.params.accountName;
         appName = req.params.appName;
         gallery = new Gallery(accountName);
-        promise = gallery.downloadFilesFromApp(appName).then(function() {
+        promise = gallery.downloadFilesFromApp(appName).then(function(path) {
           var appPath, application;
-          console.log('asdasd');
-          appPath = '../apps/colossus';
-          application = require(appPath);
+          appPath = path;
+          application = require('../' + appPath + 'colossus');
           return application.run(accountName, appName, req, res, next);
         });
         return promise["catch"](function(err) {

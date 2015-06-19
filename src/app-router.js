@@ -26,10 +26,10 @@
         promise = promise.then(function(path) {
           var appPath, application;
           appPath = path;
-          if (sandBox) {
-            application = require('../' + appPath + 'colossus');
-          } else {
+          if (sandBox != null) {
             application = fresh('../' + appPath + 'colossus', require);
+          } else {
+            application = require('../' + appPath + 'colossus');
           }
           return application.run(accountName, appName, req, res, next);
         });

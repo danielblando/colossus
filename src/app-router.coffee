@@ -21,10 +21,10 @@ class AppRouter
 
         promise = promise.then (path) ->
           appPath = path
-          if sandBox
-            application = require '../' + appPath + 'colossus'
-          else
+          if sandBox?
             application = fresh '../' + appPath + 'colossus', require
+          else
+            application = require '../' + appPath + 'colossus'
           application.run accountName, appName, req, res, next
 
         promise.catch (err) ->

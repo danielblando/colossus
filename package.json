@@ -6,7 +6,6 @@
     "body-parser": "^1.13.0",
     "coffee-script": "^1.9.3",
     "express": "^4.12.4",
-    "fresh-require": "^1.0.3",
     "libxmljs": "^0.14.1",
     "mkdirp": "^0.5.1",
     "mkpath": "^0.1.0",

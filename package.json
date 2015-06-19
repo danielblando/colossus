@@ -14,8 +14,7 @@
     "request": "^2.58.0",
     "route-parser": "0.0.3",
     "routes": "^2.0.0",
-    "vm": "0.0.1",
-    "vm2": "^0.2.2",
-    "vtex.colossus": "^1.0.3"
+    "vtex.colossus": "^1.0.3",
+    "xmldoc": "^0.3.1"
   }
 }

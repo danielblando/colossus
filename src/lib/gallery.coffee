@@ -13,7 +13,7 @@ class Gallery
     promise = promise.then (token) ->
       options =
         url: 'http://api.beta.vtex.com/' + accountName + '/workspaces/master/apps'
-        proxy: 'http://localhost:8888'
+        #proxy: 'http://localhost:8888'
         headers:
           Authorization: 'token ' + token.authCookie.Value
           Accept: 'application/vnd.vtex.gallery.v0+json'
@@ -37,7 +37,7 @@ class Gallery
     if !sandbox
       options =
         url: 'http://api.beta.vtex.com/' + vendor + '/apps/'+ appName + '/' + version + '/files?i=colossus/&content=true'
-        proxy: 'http://localhost:8888'
+        #proxy: 'http://localhost:8888'
         headers:
           Authorization: 'token ' + token.authCookie.Value
           Accept: 'application/vnd.vtex.gallery.v0+json'
@@ -48,7 +48,7 @@ class Gallery
       sandBoxName = sandbox.replace(':', '/').split('/')[1]
       options =
         url: 'http://api.beta.vtex.com/' + vendor + '/sandboxes/' + sandBoxName +  '/' + appName + '/files?i=colossus/&content=true'
-        proxy: 'http://localhost:8888'
+        #proxy: 'http://localhost:8888'
         headers:
           Authorization: 'token ' + token.authCookie.Value
           Accept: 'application/vnd.vtex.gallery.v0+json'

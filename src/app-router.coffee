@@ -20,5 +20,9 @@ class AppRouter
         promise.catch (err) ->
           next err
 
+    @router.route '/healthcheck'
+      .get (req, res, next) ->
+        res.json "ok"
+
 module.exports = (router) ->
   return new AppRouter(router)

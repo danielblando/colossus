@@ -25,6 +25,9 @@
           return next(err);
         });
       });
+      this.router.route('/healthcheck').get(function(req, res, next) {
+        return res.json("ok");
+      });
     }
 
     return AppRouter;

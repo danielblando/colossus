@@ -10,12 +10,21 @@ class AppRouter
         accountName = req.params.accountName
         appName = req.params.appName
         sandBox = req.headers['x-vtex-sandbox']
+        version = req.headers['x-vtex-env-version']
 
         gallery = new Gallery accountName
 
-        promise = gallery.downloadFilesFromApp(appName, sandBox).then (path) ->
+        if !version or !sandBox
+          promise = gallery.downloadFilesFromCustomApp(appName, version, sandBox)
+        else
+          promise = gallery.downloadFilesFromDefaultApp(appName)
+
+        promise = promise.then (path) ->
           appPath = path
-          application = fresh '../' + appPath + 'colossus', require
+          if sandBox
+            application = require '../' + appPath + 'colossus'
+          else
+            application = fresh '../' + appPath + 'colossus', require
           application.run accountName, appName, req, res, next
 
         promise.catch (err) ->

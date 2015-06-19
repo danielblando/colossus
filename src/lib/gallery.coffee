@@ -7,7 +7,8 @@ Q = require 'q'
 
 class Gallery
   constructor: (@accountName) ->
-  getVersionMap: (sandbox) ->
+
+  getVersionMap: () ->
     promise = vtexCredentials.getToken()
     accountName = @accountName
     promise = promise.then (token) ->
@@ -17,16 +18,15 @@ class Gallery
         headers:
           Authorization: 'token ' + token.authCookie.Value
           Accept: 'application/vnd.vtex.gallery.v0+json'
-      #options.headers['x-vtex-sandbox'] = sandbox if sandbox
       return request.get options
 
     return promise.then (data) ->
       return JSON.parse data
 
-  getVersionMapFromApp: (appName, sandbox) ->
+  getVersionMapFromApp: (appName) ->
     vendor = appName.split('.')[0]
     name = appName.split('.')[1]
-    promise = @getVersionMap(sandbox)
+    promise = @getVersionMap()
     return promise.then (map) ->
       for item in map
         if item.owner is vendor and item.name is name
@@ -34,33 +34,49 @@ class Gallery
       return ''
 
   getFiles: (vendor, appName, token, version, sandbox) ->
-    if !sandbox
-      options =
-        url: 'http://api.beta.vtex.com/' + vendor + '/apps/'+ appName + '/' + version + '/files?i=colossus/&content=true'
-        #proxy: 'http://localhost:8888'
-        headers:
-          Authorization: 'token ' + token.authCookie.Value
-          Accept: 'application/vnd.vtex.gallery.v0+json'
-
-      options.headers['x-vtex-sandbox'] = sandbox
-      return request.get(options)
+    if version != null
+      return getFilesFromVersion(vendor, appName, token, version)
+    else if sandbox != null
+      return getFilesFromSandbox(vendor, appName, token, sandbox)
     else
-      sandBoxName = sandbox.replace(':', '/').split('/')[1]
-      options =
-        url: 'http://api.beta.vtex.com/' + vendor + '/sandboxes/' + sandBoxName +  '/' + appName + '/files?i=colossus/&content=true'
-        #proxy: 'http://localhost:8888'
-        headers:
-          Authorization: 'token ' + token.authCookie.Value
-          Accept: 'application/vnd.vtex.gallery.v0+json'
+      throw new Error()
 
-      options.headers['x-vtex-sandbox'] = sandbox
-      return request.get(options)
+  getFilesFromVersion: (vendor, appName, token, version) ->
+    options =
+      url: 'http://api.beta.vtex.com/' + vendor + '/apps/'+ appName + '/' + version + '/files?i=colossus/&content=true'
+      #proxy: 'http://localhost:8888'
+      headers:
+        Authorization: 'token ' + token.authCookie.Value
+        Accept: 'application/vnd.vtex.gallery.v0+json'
+
+    return request.get(options)
+
+  getFilesFromSandbox: (vendor, appName, token, sandbox) ->
+    sandBoxName = sandbox.replace(':', '/').split('/')[1]
+    options =
+      url: 'http://api.beta.vtex.com/' + vendor + '/sandboxes/' + sandBoxName +  '/' + appName + '/files?i=colossus/&content=true'
+      #proxy: 'http://localhost:8888'
+      headers:
+        Authorization: 'token ' + token.authCookie.Value
+        Accept: 'application/vnd.vtex.gallery.v0+json'
+
+    options.headers['x-vtex-sandbox'] = sandbox
+    return request.get(options)
 
 
-  downloadFilesFromApp: (appName, sandbox) ->
+  downloadFilesFromDefaultApp: (appName) ->
     vendor = appName.split('.')[0]
     name = appName.split('.')[1]
-    promise = @getVersionMapFromApp appName, sandbox
+
+    promise = @getVersionMapFromApp appName
+
+    return promise.then (version) ->
+      return downloadFilesFromAppVersion(appName, version)
+
+  downloadFilesFromCustomApp: (appName, version, sandbox) ->
+    vendor = appName.split('.')[0]
+    name = appName.split('.')[1]
+
     saveFile = (appName, version, key, content, sandbox) ->
       return Q.Promise (resolve, reject, notify) ->
         if not sandbox
@@ -75,9 +91,8 @@ class Gallery
             console.log key
             resolve(appPath)
 
-    getFiles = @getFiles
-    promise = promise.then (version) ->
-      return vtexCredentials.getToken().then (token) ->
+    getFiles = @getFile
+    promise = vtexCredentials.getToken().then (token) ->
         return getFiles(vendor, name, token, version, sandbox).then (data)->
           console.log data
           appContent = JSON.parse data
@@ -88,6 +103,8 @@ class Gallery
 
     return promise.then (paths) ->
       return paths[0];
+
+
 
 
 module.exports = Gallery

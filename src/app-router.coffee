@@ -1,4 +1,5 @@
 Gallery = require './lib/gallery'
+fresh = require 'fresh-require'
 
 class AppRouter
   constructor: (@router) ->
@@ -7,12 +8,13 @@ class AppRouter
 
         accountName = req.params.accountName
         appName = req.params.appName
+        sandBox = req.headers['x-vtex-sandbox']
 
         gallery = new Gallery accountName
 
-        promise = gallery.downloadFilesFromApp(appName).then (path) ->
+        promise = gallery.downloadFilesFromApp(appName, sandBox).then (path) ->
           appPath = path
-          application = require '../' + appPath + 'colossus'
+          application = fresh '../' + appPath + 'colossus', require
           application.run accountName, appName, req, res, next
 
         promise.catch (err) ->

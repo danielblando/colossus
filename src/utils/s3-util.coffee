@@ -8,18 +8,21 @@ s3 = {}
 class S3Util
   constructor: () ->
     @promise = Q.Promise (resolve, reject, notify) ->
-      fs.readFile process.env.aws_credential_path, 'utf8', (err, data) ->
-        if not err
-          xmlDoc = new xmldoc.XmlDocument data
-          jsonDoc = {};
-          for item in xmlDoc.children
-            jsonDoc[item.name] = item.val.trim()
-          AWS.config.update
-            accessKeyId: jsonDoc['accesskeyid']
-            secretAccessKey: jsonDoc['secretaccesskey']
-            sessionToken: jsonDoc['sessiontoken']
-            region: 'us-east-1'
-        s3 = new AWS.S3();
+      if process.env.aws_credential_path?
+        fs.readFile process.env.aws_credential_path, 'utf8', (err, data) ->
+          if not err
+            xmlDoc = new xmldoc.XmlDocument data
+            jsonDoc = {};
+            for item in xmlDoc.children
+              jsonDoc[item.name] = item.val.trim()
+            AWS.config.update
+              accessKeyId: jsonDoc['accesskeyid']
+              secretAccessKey: jsonDoc['secretaccesskey']
+              sessionToken: jsonDoc['sessiontoken']
+              region: 'us-east-1'
+          s3 = new AWS.S3();
+          resolve AWS.config
+      else
         resolve AWS.config
   list: () ->
     @promise.then (data) ->

@@ -8,7 +8,7 @@ s3 = {}
 class S3Util
   constructor: () ->
     @promise = Q.Promise (resolve, reject, notify) ->
-      fs.readFile 'C:/aws_credentials_path/aws_credentials.config', 'utf8', (err, data) ->
+      fs.readFile process.env.aws_credential_path, 'utf8', (err, data) ->
         if not err
           xmlDoc = new xmldoc.XmlDocument data
           jsonDoc = {};

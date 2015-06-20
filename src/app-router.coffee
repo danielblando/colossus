@@ -5,7 +5,7 @@ path = require 'path'
 class AppRouter
   constructor: (@router) ->
     @router.route '/:accountName/colossus/:appName/*'
-      .all (req, res, next) ->
+      .all (req, res, next) =>
         accountName = req.params.accountName
         appName = req.params.appName
         sandBox = req.headers['x-vtex-sandbox']
@@ -43,7 +43,6 @@ class AppRouter
           hosts: pkg.hosts
 
         res.json whoami
-
   clearSandboxCache: (completePath) ->
     file = require.resolve(completePath)
     folder = path.dirname(file)
